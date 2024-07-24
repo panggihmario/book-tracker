@@ -16,14 +16,13 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { postApi } from "@/lib/axios";
 
 const loginFormSchema = z.object({
     username: z.string().min(1, 'The username field is required'),
     password: z.string().min(1, 'The password field is required')
 })
 
-type LoginFormSchema = z.infer<typeof loginFormSchema>
+export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 const Login = function () {
     const authContext = useContext(AuthContext)
@@ -37,21 +36,6 @@ const Login = function () {
     const { handleSubmit, control } = form
     const onSubmit = handleSubmit((values) => {
         return authContext.handleLogin(values )
-        // const data = {
-        //     url : 'https://dummyjson.com/auth/login',
-        //     params : {
-        //         username : values.username,
-        //         password : values.password
-        //     }
-        // }
-        // return postApi(data)
-        //     .then(response=> {
-        //         console.log(response)
-        //     })
-        //     .catch(err => {
-        //         console.log(err.response)
-        //     })
-
     })
     return (
         <div className="h-screen flex justify-center items-center">

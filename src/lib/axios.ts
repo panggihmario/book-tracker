@@ -2,7 +2,7 @@ import axios, {AxiosInstance} from "axios"
 type Params = {[key : string | number] : string | number | undefined }
 type Payload = {
     url : string,
-    params : Params
+    params? : Params
 }
 function createAxiosInstance () {
     const instance : AxiosInstance  = axios.create({
@@ -16,7 +16,11 @@ function createAxiosInstance () {
 
 
 function postApi ( payload : Payload) {
-    return createAxiosInstance().post( payload.url,  payload.params)
-  }
+  return createAxiosInstance().post( payload.url,  payload.params)
+}
 
-export { postApi }
+function getApi (payload :Payload ) {
+  return createAxiosInstance().get(payload.url)
+}
+
+export { postApi, getApi }

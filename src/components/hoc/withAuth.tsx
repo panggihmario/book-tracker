@@ -6,18 +6,19 @@ export default function WithAuth(Component : any) {
     
     return function checkStorage(props : any) {
         const [value] = useLocalStorage("token", "")
-        
+        const [test, setTest] = useState()
         const token =  value
         useEffect(() => {
+            setTest(value)
             if(!token) {
                 redirect('/login')
             }
         },[])
 
-        if(!token) {
-            return null
-        }
+        // if(!token) {
+        //     return null
+        // }
 
-        return <Component {...props} />
+        return <Component {...props} ></Component>
     }
 }

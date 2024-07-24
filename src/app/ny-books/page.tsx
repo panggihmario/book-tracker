@@ -19,7 +19,7 @@ const NewYorkBooks = () => {
     return (
         <div>
             <Table>
-                <TableCaption>A list of your recent invoices.</TableCaption>
+                <TableCaption>A list of your New york books.</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead >Name</TableHead>
@@ -31,7 +31,7 @@ const NewYorkBooks = () => {
                 <TableBody>
                     {books && books.map((book, idx) => {
                         return (
-                            <TableRow>
+                            <TableRow key={idx}>
                                 <TableCell className="font-medium">{book.display_name}</TableCell>
                                 <TableCell>{book.newest_published_date}</TableCell>
                                 <TableCell>{book.updated}</TableCell>

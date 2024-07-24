@@ -2,7 +2,6 @@
 
 import { createContext, useEffect, useState } from "react"
 import { postApi } from "@/lib/axios";
-import { getApi } from "@/lib/axios"
 import { LoginFormSchema } from "@/app/login/page";
 import { useRouter } from 'next/navigation'
 import useLocalStorage from "@/components/hook/useLocalStorage";

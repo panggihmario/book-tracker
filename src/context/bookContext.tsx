@@ -10,16 +10,39 @@ interface LooseObject {
 }
 type BookContextObj = {
     books : LooseObject[],
-    fetchNyBooks : () => void
+    nyBooks : LooseObject[],
+    fetchNyBooks : () => void,
+    fetchBooks : () => void,
 }
 export const BookContext = createContext<BookContextObj>({
     books : [],
+    nyBooks : [],
     fetchNyBooks() {},
+    fetchBooks : () => {},
 })
 
 const BookContextProvider : React.FC<BookProps> = (props) => {
     const [books , setBooks] = useState([])
-    function fetchNyBooks () {
+    const [nyBooks, setNyBooks] = useState([])
+    const booksUrl = 'https://frontend-assignment-be.vercel.app/api/books'
+    const fetchBooks = function () {
+        const data = {
+            url : booksUrl
+        }
+        return getApi(data)
+            .then(response => {
+                console.log(response)
+                const responseData = response.data
+                const results = responseData.books
+                setBooks(results)
+                return results
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const fetchNyBooks = function () {
         const data = {
             url : 'https://api.nytimes.com/svc/books/v3/lists/names.json',
             params : {
@@ -28,7 +51,6 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
         }
         return getApi(data)
             .then(response => {
-                console.log(response)
                 const result = response.data.results
                 setBooks(result)
             })
@@ -38,7 +60,9 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
     }
     const contextValue : BookContextObj = {
         books,
-        fetchNyBooks
+        nyBooks,
+        fetchNyBooks,
+        fetchBooks,
     }
     return <BookContext.Provider value={contextValue} >{props.children}</BookContext.Provider>
 } 

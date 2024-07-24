@@ -2,27 +2,33 @@ import axios, {AxiosInstance} from "axios"
 type Params = {[key : string | number] : string | number | undefined }
 type Payload = {
     url : string,
-    params? : Params
+    params? : Params,
+    data ? : Params
 }
 function createAxiosInstance () {
     const instance : AxiosInstance  = axios.create({
         timeout: 60 * 4 * 1000,
         headers: {
-          "Content-Type": `application/json`,
+          "Content-Type": `application/x-www-form-urlencoded`,
         },
       })
     return instance
 }
 
 
-function postApi ( payload : Payload) {
+const postApi = function ( payload : Payload) {
   return createAxiosInstance().post( payload.url,  payload.params)
 }
 
-function getApi (payload :Payload ) {
+const getApi = function (payload :Payload ) {
   return createAxiosInstance().get(payload.url,  {
     params : {...payload.params}
   })
 }
 
-export { postApi, getApi }
+const putApi = function (payload : Payload) {
+  return createAxiosInstance().put(payload.url, payload.data)
+
+}
+
+export { postApi, getApi, putApi }

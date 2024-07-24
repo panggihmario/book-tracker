@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, ReactNode } from 'react'
+import { useEffect, ReactNode, useContext } from 'react'
 import { z } from "zod";
 import { Button } from "@/components/container/button"
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@/components/ui/input"
+import { BookContext } from "@/context/bookContext";
 import {
   Form,
   FormControl,
@@ -56,11 +57,19 @@ export default function DialogComponent({ book, title, isDialog, closeDialog }: 
     }
   })
   const { handleSubmit, control, reset } = form
+  const {  editBook } = useContext(BookContext)
 
   const onSubmit = handleSubmit((values) => {
     const id = book._id
+    const temp = values
     if(id) {
       console.log('edit')
+      const payload = {
+        params : {...values},
+        id
+      }
+      console.log(payload)
+      return editBook(payload)
     }else{
       console.log('create')
     }

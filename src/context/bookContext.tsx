@@ -1,7 +1,7 @@
 "use client"; // This is a client component 
 
 import { createContext, useState } from "react";
-import { getApi } from "@/lib/axios";
+import { getApi, putApi } from "@/lib/axios";
 interface BookProps {
     children?: React.ReactNode;
 }
@@ -13,12 +13,14 @@ type BookContextObj = {
     nyBooks : LooseObject[],
     fetchNyBooks : () => void,
     fetchBooks : () => void,
+    editBook : (payload : any) => void
 }
 export const BookContext = createContext<BookContextObj>({
     books : [],
     nyBooks : [],
     fetchNyBooks() {},
     fetchBooks : () => {},
+    editBook : () => {}
 })
 
 const BookContextProvider : React.FC<BookProps> = (props) => {
@@ -31,11 +33,24 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
         }
         return getApi(data)
             .then(response => {
-                console.log(response)
                 const responseData = response.data
                 const results = responseData.books
                 setBooks(results)
                 return results
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const editBook = function (payload : any) {
+        const data = {
+            url : `${booksUrl}/${payload.id}`,
+            data : {...payload.params}
+        }
+        return putApi(data)
+            .then(response => {
+                console.log(response)
             })
             .catch(err => {
                 console.log(err)
@@ -63,6 +78,7 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
         nyBooks,
         fetchNyBooks,
         fetchBooks,
+        editBook
     }
     return <BookContext.Provider value={contextValue} >{props.children}</BookContext.Provider>
 } 

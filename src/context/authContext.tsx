@@ -2,6 +2,7 @@
 
 import { createContext, useEffect, useState } from "react"
 import { postApi } from "@/lib/axios";
+import { getApi } from "@/lib/axios"
 import { LoginFormSchema } from "@/app/login/page";
 import { useRouter } from 'next/navigation'
 import useLocalStorage from "@/components/hook/useLocalStorage";
@@ -25,9 +26,7 @@ const AuthContextProvider: React.FC<MyAuthProps> = (props) => {
   const [isLogin, setIsLogin] = useState(false)
   const [value, setValue, removeValue] = useLocalStorage("token", "")
 
-  useEffect(() => {
-    setIsLogin(value)
-  },[value])
+ 
 
   const handleLogin = function (values: LoginFormSchema) {
     const data = {
@@ -59,7 +58,7 @@ const AuthContextProvider: React.FC<MyAuthProps> = (props) => {
   const contextValue: AuthContextObj = {
     handleLogin,
     isLogin,
-    handleLogout
+    handleLogout,
   }
 
   return <AuthContext.Provider value={contextValue} >{props.children}</AuthContext.Provider>

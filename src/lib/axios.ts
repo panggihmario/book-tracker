@@ -20,7 +20,9 @@ function postApi ( payload : Payload) {
 }
 
 function getApi (payload :Payload ) {
-  return createAxiosInstance().get(payload.url)
+  return createAxiosInstance().get(payload.url,  {
+    params : {...payload.params}
+  })
 }
 
 export { postApi, getApi }

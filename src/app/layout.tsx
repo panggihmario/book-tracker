@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import NavigationBar from "@/components/container/navigation";
 import AuthContextProvider from "@/context/authContext";
+import BookContextProvider from "@/context/bookContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,9 +22,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthContextProvider>
           <NavigationBar></NavigationBar>
-          <>
+          <BookContextProvider>
+          <main className="flex min-h-screen flex-col items-center justify-between p-24">
           {children}
-          </>
+
+          </main>
+          </BookContextProvider>
         </AuthContextProvider>
        
       </body>

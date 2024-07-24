@@ -5,8 +5,9 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/container/button"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React from "react";
+import React, { useContext} from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { AuthContext } from "@/context/authContext";
 import {
     Form,
     FormControl,
@@ -25,6 +26,7 @@ const loginFormSchema = z.object({
 type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 const Login = function () {
+    const authContext = useContext(AuthContext)
     const form = useForm<LoginFormSchema>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -33,29 +35,29 @@ const Login = function () {
           },
     })
     const { handleSubmit, control } = form
-    const handleLogin = handleSubmit((values) => {
-        console.log(values)
-        const data = {
-            url : 'https://dummyjson.com/auth/login',
-            params : {
-                username : values.username,
-                password : values.password
-            }
-        }
-        return postApi(data)
-            .then(response=> {
-                console.log(response)
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+    const onSubmit = handleSubmit((values) => {
+        return authContext.handleLogin(values )
+        // const data = {
+        //     url : 'https://dummyjson.com/auth/login',
+        //     params : {
+        //         username : values.username,
+        //         password : values.password
+        //     }
+        // }
+        // return postApi(data)
+        //     .then(response=> {
+        //         console.log(response)
+        //     })
+        //     .catch(err => {
+        //         console.log(err.response)
+        //     })
 
     })
     return (
         <div className="h-screen flex justify-center items-center">
             <Card className="w-[350px]">
                 <Form {...form}>
-                    <form noValidate onSubmit={handleLogin}>
+                    <form  onSubmit={onSubmit}>
                         <div className="grid w-full items-center gap-4">
                             <FormField
                                 control={control}

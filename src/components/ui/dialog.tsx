@@ -59,7 +59,7 @@ function DialogComponent({ book, title, isDialog, closeDialog }: Props) {
   const { handleSubmit, control, reset } = form
   const {  editBook, addBook , deleteBook} = useContext(BookContext)
 
-  const onSubmit =  handleSubmit((values) => {
+  const onSubmit =  handleSubmit(async(values) => {
     const id = book._id
     const temp = {...values}
     if(id) {
@@ -74,11 +74,8 @@ function DialogComponent({ book, title, isDialog, closeDialog }: Props) {
         ...temp
       }
     
-      return addBook(payload)
-        .then(() => {
-          closeDialog(false)
-        })
-      
+      await addBook(payload)
+      closeDialog(false)
     }
   })
 

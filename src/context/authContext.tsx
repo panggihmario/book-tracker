@@ -12,22 +12,24 @@ type AuthContextObj = {
   handleLogin: (values: LoginFormSchema) => void,
   handleLogout : () => void,
   isLogin: boolean,
+  isLoading : boolean
 }
 
 export const AuthContext = createContext<AuthContextObj>({
   handleLogin: () => { },
   handleLogout : () => {},
   isLogin: false,
+  isLoading : false
 })
 
 const AuthContextProvider: React.FC<MyAuthProps> = (props) => {
   const router = useRouter()
   const [isLogin, setIsLogin] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [value, setValue, removeValue] = useLocalStorage("token", "")
 
- 
-
   const handleLogin = function (values: LoginFormSchema) {
+    setIsLoading(true)
     const data = {
       url: 'https://dummyjson.com/auth/login',
       params: {
@@ -39,13 +41,14 @@ const AuthContextProvider: React.FC<MyAuthProps> = (props) => {
       .then(response => {
         const responseData = response.data
         const token = responseData.token
+        setIsLoading(false)
         setValue(token)
         router.push('/')
         setIsLogin(true)
       })
       .catch(err => {
         setIsLogin(false)
-        console.log(err.response)
+        setIsLoading(false)
       })
   }
 
@@ -57,6 +60,7 @@ const AuthContextProvider: React.FC<MyAuthProps> = (props) => {
   const contextValue: AuthContextObj = {
     handleLogin,
     isLogin,
+    isLoading,
     handleLogout,
   }
 

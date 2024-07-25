@@ -2,6 +2,7 @@
 
 import { createContext, useState } from "react";
 import { getApi, putApi, postApi, deleteApi } from "@/lib/axios";
+import { AxiosResponse } from "axios";
 interface BookProps {
     children?: React.ReactNode;
 }
@@ -18,13 +19,23 @@ type BookContextObj = {
     deleteBook : (payload : any) => void
 }
 export const BookContext = createContext<BookContextObj>({
-    books : [],
-    nyBooks : [],
-    fetchNyBooks() {},
-    fetchBooks : () => {},
-    editBook : () => {},
-    addBook: async () => {},
-    deleteBook : () => {}
+    books: [],
+    nyBooks: [],
+    fetchNyBooks: function (): void {
+        throw new Error("Function not implemented.");
+    },
+    fetchBooks: function (): void {
+        throw new Error("Function not implemented.");
+    },
+    editBook: function (payload: any): void {
+        throw new Error("Function not implemented.");
+    },
+    addBook: function (payload: any): AxiosResponse {
+        throw new Error("Function not implemented.");
+    },
+    deleteBook: function (payload: any): void {
+        throw new Error("Function not implemented.");
+    }
 })
 
 const BookContextProvider : React.FC<BookProps> = (props) => {
@@ -70,8 +81,10 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
                 console.log(err)
             })
     }
-
-    const addBook  = function (payload : any) : Promise<any>  {
+    type response = {
+        data : any
+    }
+    const addBook  = function (payload : any)   {
         const data = {
             url : booksUrl,
             params :  {...payload}
@@ -95,7 +108,7 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
         return getApi(data)
             .then(response => {
                 const result = response.data.results
-                setBooks(result)
+                setNyBooks(result)
             })
             .catch(err => {
                 console.log(err.response)

@@ -1,7 +1,10 @@
 "use client"; // This is a client component 
 
 import { useEffect, useContext } from "react"
+import { Button } from "@/components/container/button";
 import { BookContext } from "@/context/bookContext";
+import WithAuth from "@/components/hoc/withAuth"
+import Item from "@/components/container/item";
 import {
     Table,
     TableBody,
@@ -12,39 +15,28 @@ import {
     TableRow,
 } from "@/components/ui/table"
 const NewYorkBooks = () => {
-    const { fetchNyBooks, books } = useContext(BookContext)
+    const { fetchNyBooks, nyBooks, addBook } = useContext(BookContext)
+    const handleClick = function (params: any) {
+        console.log(params)
+        return addBook(params)
+        // .then(() => {
+        //     console.log('response')
+        // })
+    }
     useEffect(() => {
         fetchNyBooks()
     }, [])
     return (
-        <div>
-            <Table>
-                <TableCaption>A list of your New york books.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead >Name</TableHead>
-                        <TableHead className="w-[200px]">Published</TableHead>
-                        <TableHead>Updated</TableHead>
-                        {/* <TableHead className="text-right">Amount</TableHead> */}
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {books && books.map((book, idx) => {
-                        return (
-                            <TableRow key={idx}>
-                                <TableCell className="font-medium">{book.display_name}</TableCell>
-                                <TableCell>{book.newest_published_date}</TableCell>
-                                <TableCell>{book.updated}</TableCell>
-                                {/* <TableCell className="text-right">$250.00</TableCell> */}
-                            </TableRow>
-                        )
-                    })}
+        <ul role="list" className="divide-y divide-gray-100">
+            {nyBooks && nyBooks.map((book, idx) => {
+                return (
+                    <Item book={book} key={idx} />
+                )
+            })}
 
-                </TableBody>
-            </Table>
 
-        </div>
+        </ul>
     )
 }
 
-export default NewYorkBooks
+export default WithAuth(NewYorkBooks)

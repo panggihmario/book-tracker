@@ -23,9 +23,8 @@ export default function RootLayout({
         <AuthContextProvider>
           <NavigationBar></NavigationBar>
           <BookContextProvider>
-          <main className="flex min-h-screen flex-col items-center justify-between p-24">
-          {children}
-
+          <main className=" h-screen flex-col items-center justify-between p-24">
+            {children}
           </main>
           </BookContextProvider>
         </AuthContextProvider>

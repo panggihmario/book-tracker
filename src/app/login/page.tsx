@@ -25,7 +25,7 @@ const loginFormSchema = z.object({
 export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 const Login = function () {
-    const authContext = useContext(AuthContext)
+    const {handleLogin, isLoading} = useContext(AuthContext)
     const form = useForm<LoginFormSchema>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -35,7 +35,7 @@ const Login = function () {
     })
     const { handleSubmit, control } = form
     const onSubmit = handleSubmit((values) => {
-        return authContext.handleLogin(values )
+        return handleLogin(values )
     })
     return (
         <div className="h-screen flex justify-center items-center">
@@ -71,7 +71,9 @@ const Login = function () {
                                 }}
                             >
                             </FormField>
-                            <Button type="submit">Login</Button>
+                            <Button type="submit">
+                                {isLoading ? 'Loading..' : 'Login'}
+                            </Button>
                         </div>
                     </form>
                 </Form>

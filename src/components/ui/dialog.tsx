@@ -49,7 +49,7 @@ const bookFormSchema = z.object({
   })
 })
 type BookFormSchema = z.infer<typeof bookFormSchema>
-export default function DialogComponent({ book, title, isDialog, closeDialog }: Props) {
+function DialogComponent({ book, title, isDialog, closeDialog }: Props) {
   const form = useForm<BookFormSchema>({
     resolver: zodResolver(bookFormSchema),
     defaultValues : {
@@ -234,3 +234,7 @@ export default function DialogComponent({ book, title, isDialog, closeDialog }: 
   )
 }
 
+DialogComponent.displayName = 'DialogComponent';
+
+
+export default DialogComponent

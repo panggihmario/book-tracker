@@ -16,7 +16,7 @@ function createAxiosInstance () {
 }
 
 
-const postApi = function ( payload : Payload) {
+function postApi  ( payload : Payload) : Promise<any>  {
   return createAxiosInstance().post( payload.url,  payload.params)
 }
 
@@ -28,7 +28,11 @@ const getApi = function (payload :Payload ) {
 
 const putApi = function (payload : Payload) {
   return createAxiosInstance().put(payload.url, payload.data)
-
 }
 
-export { postApi, getApi, putApi }
+const deleteApi = function(payload : Payload){
+  // return createAxiosInstance().delete(payload.url)
+  return axios.delete(payload.url)
+}
+
+export { postApi, getApi, putApi, deleteApi }

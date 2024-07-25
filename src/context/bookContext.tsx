@@ -1,7 +1,7 @@
 "use client"; // This is a client component 
 
 import { createContext, useState } from "react";
-import { getApi, putApi } from "@/lib/axios";
+import { getApi, putApi, postApi, deleteApi } from "@/lib/axios";
 interface BookProps {
     children?: React.ReactNode;
 }
@@ -13,18 +13,22 @@ type BookContextObj = {
     nyBooks : LooseObject[],
     fetchNyBooks : () => void,
     fetchBooks : () => void,
-    editBook : (payload : any) => void
+    editBook : (payload : any) => void,
+    addBook : (payload : any) => void,
+    deleteBook : (payload : any) => void
 }
 export const BookContext = createContext<BookContextObj>({
     books : [],
     nyBooks : [],
     fetchNyBooks() {},
     fetchBooks : () => {},
-    editBook : () => {}
+    editBook : () => {},
+    addBook: async () => {},
+    deleteBook : () => {}
 })
 
 const BookContextProvider : React.FC<BookProps> = (props) => {
-    const [books , setBooks] = useState([])
+    const [books , setBooks] = useState<any>([])
     const [nyBooks, setNyBooks] = useState([])
     const booksUrl = 'https://frontend-assignment-be.vercel.app/api/books'
     const fetchBooks = function () {
@@ -43,17 +47,41 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
             })
     }
 
+    const deleteBook = function (payload : any) {
+        const data = {
+            url : `${booksUrl}/${payload}`,
+        }
+        return deleteApi(data)
+            .then(() => {
+                return fetchBooks() 
+            })
+    }
+
     const editBook = function (payload : any) {
         const data = {
             url : `${booksUrl}/${payload.id}`,
             data : {...payload.params}
         }
         return putApi(data)
-            .then(response => {
-                console.log(response)
+            .then(() => {
+                return fetchBooks()
             })
             .catch(err => {
                 console.log(err)
+            })
+    }
+
+    const addBook  = function (payload : any) : Promise<any>  {
+        const data = {
+            url : booksUrl,
+            params :  {...payload}
+        }
+        return postApi(data) 
+            .then(response => {
+                return fetchBooks()
+            })
+            .catch(err => {
+                throw err
             })
     }
 
@@ -78,7 +106,9 @@ const BookContextProvider : React.FC<BookProps> = (props) => {
         nyBooks,
         fetchNyBooks,
         fetchBooks,
-        editBook
+        editBook,
+        addBook,
+        deleteBook
     }
     return <BookContext.Provider value={contextValue} >{props.children}</BookContext.Provider>
 } 

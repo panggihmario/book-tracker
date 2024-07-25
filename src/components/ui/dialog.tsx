@@ -57,23 +57,32 @@ export default function DialogComponent({ book, title, isDialog, closeDialog }: 
     }
   })
   const { handleSubmit, control, reset } = form
-  const {  editBook } = useContext(BookContext)
+  const {  editBook, addBook , deleteBook} = useContext(BookContext)
 
-  const onSubmit = handleSubmit((values) => {
+  const onSubmit =  handleSubmit((values) => {
     const id = book._id
-    const temp = values
+    const temp = {...values}
     if(id) {
-      console.log('edit')
       const payload = {
-        params : {...values},
+        params : {...temp},
         id
       }
-      console.log(payload)
       return editBook(payload)
+
     }else{
-      console.log('create')
+      const payload = {
+        ...temp
+      }
+    
+      return addBook(payload)
+        .then(() => {
+          closeDialog(false)
+        })
+      
     }
   })
+
+ 
 
   useEffect(() => {
     reset(book)

@@ -15,9 +15,13 @@ import { Button } from "@/components/container/button"
 import DialogComponent from "@/components/ui/dialog";
 
 const Home = () => {
-  const { fetchBooks, books } = useContext(BookContext)
+  const { fetchBooks, books, deleteBook } = useContext(BookContext)
   const [dialog, setDialog] = useState<boolean>(false)
   const [bookItem, setBookItem] = useState({})
+
+  const handleDelete = function (id : any) {
+    return deleteBook(id)
+  }
 
   const openDialog = function (book : any) {
     setDialog(true)
@@ -59,7 +63,7 @@ const Home = () => {
                 <TableCell>{book.status}</TableCell>
                 <TableCell className="text-center flex gap-2 justify-center">
                   <Button onClick={() => openDialog(book)}>Edit</Button>
-                  <Button>Delete</Button>
+                  <Button onClick={() => deleteBook(book._id)} >Delete</Button>
                 </TableCell>
               </TableRow>
             )

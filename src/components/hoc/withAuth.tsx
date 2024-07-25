@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import useLocalStorage from "../hook/useLocalStorage";
 export default function WithAuth(Component : any) {
     
-    return function checkStorage(props : any) {
+    return function CheckStorage(props : any) {
         const [value] = useLocalStorage("token", "")
         const [test, setTest] = useState()
         const token =  value
